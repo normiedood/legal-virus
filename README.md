@@ -1,13 +1,19 @@
 # Legal Virus
 
-Legal Virus is an open-source project intended to collect examples, tools, and utilities to experiment with legal-tech workflows. Replace this description with a short summary of what the project does and any public demonstrations or design docs.
+Legal Virus is a premium, open-source multi-agent legal assistance application (also known as Lex AI) designed to help self-representing individuals, tenants, and contract reviewers navigate legal situations, identify exposure, search case law, and analyze lease covenants.
+
+The system is powered by a **FastAPI backend**, a **Vanilla HTML/CSS/JS SPA frontend**, **LangGraph multi-agent workflows**, and a hybrid retrieval-augmented generation (RAG) system utilizing **Qdrant local serverless database** and the **CourtListener Open Opinions API**.
 
 This repository now includes contribution and reporting templates to make it easier for others to file issues and contribute changes.
 
 ## Table of contents
 
 - [About](#about)
+- [Multi-Agent Architecture](#multi-agent-architecture)
+- [Features](#features)
 - [Getting started](#getting-started)
+- [Environment Variables](#environment-variables)
+- [Testing & Evaluation](#testing--evaluation)
 - [Reporting issues](#reporting-issues)
 - [How to contribute](#how-to-contribute)
 - [Branching & Pull Request workflow](#branching--pull-request-workflow)
@@ -17,31 +23,122 @@ This repository now includes contribution and reporting templates to make it eas
 
 ## About
 
-Replace this paragraph with a clear explanation of what Legal Virus does, the problem it solves, and any important links (design docs, website, demo).
+Legal Virus orchestrates specialized AI agents in a structured, state-based graph using **LangGraph**. The workflow dynamically adapts depending on whether you upload a lease or a legal document.
+
+### Multi-Agent Architecture
+
+```mermaid
+graph TD
+    UserQuery[User Query & Documents] --> Orchestrate[Orchestrator Node]
+    Orchestrate --> Router{Has Documents?}
+    
+    Router -- Yes --> DocAnalyzer[Document Analyzer Agent]
+    Router -- No --> Classifier[Classifier Agent]
+    
+    DocAnalyzer --> Research[Researcher Agent]
+    Classifier --> Research
+    
+    Research -->|Local Qdrant RAG + CourtListener API| RiskAssessor[Risk Assessor Agent]
+    RiskAssessor --> Synthesizer[Synthesizer Agent]
+    Synthesizer --> SafetyGuard[Safety Guard Agent]
+    
+    SafetyGuard -->|Apply Jurisdiction Disclaimer| Output[Final Formatted Response]
+```
+
+### Agents Breakdown
+1. **Orchestrator:** Initializes the graph state, logs decisions, and decides execution routing.
+2. **Classifier:** Categorizes inquiries (e.g., `tenant_rights`, `employment`, `contract`), extracts legal concepts, and flags jurisdiction dependencies.
+3. **Document Analyzer:** Processes uploaded contracts/leases page-by-page. Identifies red flags (with severity ratings), missing tenant protections, unusual clauses, financial liabilities, and critical deadlines.
+4. **Researcher:** Conducts hybrid search. Queries local document vectors inside the Qdrant DB and retrieves related federal and state court opinions using the external CourtListener Search API.
+5. **Risk Assessor:** Conducts a multi-dimensional risk assessment scoring legal risk, financial risk, time-sensitivity, and complexity (1-10) and recommends immediate actions or attorney consulting.
+6. **Synthesizer:** Incorporates retrieved case law and local documents to structure a response using Nvidia's Llama 3.3.
+7. **Safety Guard:** Ensures compliance by checking for legal advice assertions, adding local hotlines/resources (EEOC, Tenant Unions, etc.), and appending mandatory legal disclaimers.
+
+## Features
+
+- 💻 **Interactive SPA Interface:** Built with clean Vanilla JS, Outfit & Inter typography, glassmorphism, responsive sidebar widgets, and animated agent pipeline progression.
+- 📂 **Local Document Ingestion:** Custom PDF text extraction, chunking, and vector upload using local HuggingFace embeddings (`all-MiniLM-L6-v2`) — **no external API keys required for vectors**.
+- 🏛️ **Real-world Case citations:** Automatically resolves queries with actual U.S. court opinions (case names, court jurisdictions, and citations) via CourtListener API.
+- 🛡️ **Built-in Safety Checks:** Programmatic disclaimers, domain-specific emergency resources, and attorney referral recommendations.
+- 💾 **Offline Vector Store:** Automatically runs serverless local storage (`./qdrant_data`), removing the need to manage a separate running database engine for local workloads.
+- 🐳 **Dockerized Service Setup:** Pre-configured Docker Compose file to spin up both the FastAPI application and a Qdrant cluster container instantly.
 
 ## Getting started
 
-Prerequisites
+### Prerequisites
 - Git
-- The project's runtime and toolchain (e.g., Node.js 16+, Python 3.10+, etc.) — update as appropriate.
+- Python 3.11+
+- Virtual Environment tool (`venv`)
+- *Optional:* Docker & Docker Compose (for containerized deployments)
 
-Clone the repository
+### Clone the repository
 
 ```bash
-git clone https://github.com/thawaitsameer/legal-virus.git
+git clone https://github.com/sameerthawait/legal-virus.git
 cd legal-virus
 ```
 
-Run / build
-- Add any commands here to run or build the project, for example:
+### Installation & Run
 
+1. **Create and Activate Virtual Environment:**
+   ```bash
+   python -m venv venv
+   # On Windows (PowerShell):
+   .\venv\Scripts\Activate.ps1
+   # On macOS/Linux:
+   source venv/bin/activate
+   ```
+
+2. **Install Dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Ingest Legal Reference Documents:**
+   Place PDF files (e.g., California Tenant's Rights Handbook) in the `documents/` folder, then run the ingestion script to vectorize and store them in the local Qdrant database:
+   ```bash
+   python ingest.py
+   ```
+
+4. **Run the FastAPI Server:**
+   ```bash
+   python main.py
+   ```
+
+5. **Access the App:**
+   Open [http://localhost:8000](http://localhost:8000) in your browser.
+
+## Environment Variables
+
+Copy the example environment file and configure your API credentials in `.env`:
 ```bash
-# install dependencies (example)
-npm install
-
-# run (example)
-npm start
+copy .env.example .env
 ```
+
+Required keys:
+- `NVIDIA_API_KEY`: NVIDIA build platform token (free tier available)
+- `COURTLISTENER_API_KEY`: Optional CourtListener API token
+
+## Testing & Evaluation
+
+Run the built-in test suites to verify index building, database connection dimensions, and agent scoring:
+
+- **Check Qdrant Serverless:**
+  ```bash
+  python test_query_points.py
+  ```
+- **LlamaIndex Pipeline Check:**
+  ```bash
+  python test_pipeline.py
+  ```
+- **RAG Ingestion Evaluation:**
+  ```bash
+  python eval.py
+  ```
+- **LangGraph Multi-Agent Verification:**
+  ```bash
+  python eval/legal_eval.py
+  ```
 
 ## Reporting issues
 
