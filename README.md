@@ -1,6 +1,8 @@
 # Legal Virus
 
-This repository (legal-virus) is an open-source project. This README explains how to get the code, report issues, and contribute changes via pull requests so others can pull it and give contributions.
+Legal Virus is an open-source project intended to collect examples, tools, and utilities to experiment with legal-tech workflows. Replace this description with a short summary of what the project does and any public demonstrations or design docs.
+
+This repository now includes contribution and reporting templates to make it easier for others to file issues and contribute changes.
 
 ## Table of contents
 
@@ -9,18 +11,19 @@ This repository (legal-virus) is an open-source project. This README explains ho
 - [Reporting issues](#reporting-issues)
 - [How to contribute](#how-to-contribute)
 - [Branching & Pull Request workflow](#branching--pull-request-workflow)
+- [Files added by maintainers](#files-added-by-maintainers)
 - [Code of Conduct](#code-of-conduct)
 - [License](#license)
 
 ## About
 
-A short description of the project goes here. Replace this paragraph with a clear explanation of what Legal Virus does, the problem it solves, and any important links (design docs, website, demo).
+Replace this paragraph with a clear explanation of what Legal Virus does, the problem it solves, and any important links (design docs, website, demo).
 
 ## Getting started
 
 Prerequisites
 - Git
-- Any language/runtime required by the project (e.g., Node.js, Python). Add specifics here.
+- The project's runtime and toolchain (e.g., Node.js 16+, Python 3.10+, etc.) — update as appropriate.
 
 Clone the repository
 
@@ -42,94 +45,51 @@ npm start
 
 ## Reporting issues
 
-If you find a bug or want a new feature, please open an issue so maintainers and contributors can discuss and act on it.
+We provide templates to make filing issues easier:
+- Bug report: .github/ISSUE_TEMPLATE/bug_report.md
+- Feature request: .github/ISSUE_TEMPLATE/feature_request.md
 
-When opening an issue, please choose the appropriate type and include as much relevant information as possible. Below are example templates you can copy into a new issue body.
-
-### Bug report (example)
-
-**Title**: Short, descriptive title
-
-**Describe the bug**
-A clear and concise description of what the bug is.
-
-**To reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '...'
-3. See error
-
-**Expected behavior**
-A clear description of what you expected to happen.
-
-**Screenshots / Logs**
-If applicable, add screenshots or paste relevant logs.
-
-**Environment (please complete the following information):**
-- OS: e.g. Windows 10, macOS 12, Ubuntu 20.04
-- Version: project version or commit hash
-- Runtime: e.g. Node.js v16, Python 3.10
-
-**Additional context**
-Add any other context about the problem here.
-
-### Feature request (example)
-
-**Title**: Short, descriptive title for the feature
-
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of the problem.
-
-**Describe the solution you'd like**
-A clear description of what you want to happen.
-
-**Alternatives considered**
-A clear description of any alternative solutions or features you've considered.
-
-**Additional context**
-Add any other context or screenshots about the feature request here.
+When opening an issue, include steps to reproduce, expected behavior, and relevant environment information.
 
 ## How to contribute
 
-We welcome contributions. The typical workflow is:
+We welcome contributions. Common ways to contribute:
+- Open issues (bug reports, feature requests, questions)
+- Submit pull requests with fixes, documentation, or enhancements
+
+Typical workflow:
 
 1. Fork the repository (or create a branch if you have write access).
-2. Clone your fork and create a new branch with a descriptive name:
+2. Create a new branch named with a short, descriptive prefix, e.g. `feat/`, `fix/`, `docs/`:
 
 ```bash
-git checkout -b feat/my-feature
+git checkout -b feat/short-description
 ```
 
-3. Make your changes with clear, focused commits.
-4. Run tests and linters (if any) and ensure all checks pass.
-5. Push your branch to your fork:
+3. Make small, focused commits and write clear commit messages.
+4. Run tests and linters (if applicable).
+5. Push the branch to your fork and open a Pull Request against `main`.
 
-```bash
-git push origin feat/my-feature
-```
-
-6. Open a Pull Request against `main` (or the repository's default branch) with a clear title and description referencing any related issues.
-
-### Good PR description
-- What changed and why
-- Link to related issue(s)
-- Steps to test
-- Screenshots if UI changes
+See CONTRIBUTING.md for more details.
 
 ## Branching & Pull Request workflow
 
-- Use short-lived feature branches: `feat/`, `fix/`, `chore/`, `docs/` prefixes are helpful.
-- Rebase or merge the latest default branch into your branch before opening or updating the PR to keep it up to date.
-- One feature or fix per PR keeps reviews simpler.
+- Use short-lived feature branches with prefixes: `feat/`, `fix/`, `chore/`, `docs/`.
+- Rebase or merge the default branch into your branch before updating the PR.
+- Keep one feature per PR to simplify review.
+
+## Files added by maintainers
+
+- CONTRIBUTING.md — contribution guidelines and workflow
+- LICENSE — MIT License
+- CODE_OF_CONDUCT.md — expected community behavior
+- .github/ISSUE_TEMPLATE/ — bug and feature templates
+- .github/PULL_REQUEST_TEMPLATE.md — PR checklist and guidance
 
 ## Code of Conduct
 
-Be respectful and kind. By participating, you agree to follow the project's Code of Conduct. You can add a separate `CODE_OF_CONDUCT.md` if you'd like to include details.
+This project follows a Code of Conduct. Please read CODE_OF_CONDUCT.md for details on expected behavior and how to contact the maintainers if you experience or witness unacceptable behavior.
 
 ## License
 
-Add license details here (for example, MIT). If you don't have a license yet, consider adding one so contributors know the terms.
-
----
-
-Thanks for your interest in contributing! If you'd like, I can also create a basic ISSUE_TEMPLATE or CONTRIBUTING file in this repo to make reporting issues and PRs even easier.
+This project is licensed under the MIT License. See LICENSE for details.
